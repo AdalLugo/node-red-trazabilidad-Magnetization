@@ -1,0 +1,426 @@
+[
+    {
+        "id": "c3bacffc40d8e6b4",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ccf7d222d379b4c7",
+        "type": "postgresdb",
+        "cfgname": "Conexion_Flux_Meter",
+        "hostname": "127.0.0.1",
+        "port": 5432,
+        "db": "trazabilidad_Flux_meter",
+        "ssl": false
+    },
+    {
+        "id": "cdb4a012f44cfba5",
+        "type": "ui_tab",
+        "name": "Danfoss",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "a044e9bb8607152d",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "b162acb8d557fe77",
+        "type": "ui_group",
+        "name": "Reporte Flux Meter",
+        "tab": "cdb4a012f44cfba5",
+        "order": 1,
+        "disp": true,
+        "width": "18",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "c08f7044d6da88ab",
+        "type": "serial-port",
+        "name": "flux meter rs-232",
+        "serialport": "COM4",
+        "serialbaud": "9600",
+        "databits": "7",
+        "parity": "even",
+        "stopbits": "2",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": 10000
+    },
+    {
+        "id": "fe0d784d484d6df4",
+        "type": "ui_group",
+        "name": "Trazabilidad",
+        "tab": "cdb4a012f44cfba5",
+        "order": 2,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "2094d338f957b3af",
+        "type": "serial-port",
+        "name": "sscanner ",
+        "serialport": "COM6",
+        "serialbaud": "9600",
+        "databits": 8,
+        "parity": "none",
+        "stopbits": 1,
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "50",
+        "bin": "false",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": 10000
+    },
+    {
+        "id": "cb2f12d1b5e0a154",
+        "type": "function",
+        "z": "c3bacffc40d8e6b4",
+        "name": "funcion scanner ",
+        "func": "let raw = msg.payload.trim();\n\n// separar por ;\nlet parts = raw.split(\";\");\n\nif (parts.length < 3) {\n  node.warn(\"Formato inesperado: \" + raw);\n  return null;\n}\n\n// quitar P del modelo\nlet model = parts[0].replace(/^P/, \"\");\n\n// serie\nlet sn = parts[2].trim();\n\n// validaciones\nif (!/^S\\d{7}$/.test(sn)) {\n  node.warn(\"SN inválido: \" + sn);\n  return null;\n}\n\nmsg.payload = {\n  model: model,\n  sn: sn,\n  scan_ts: new Date().toISOString()\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 160,
+        "wires": [
+            [
+                "faaed5cef799f41f"
+            ]
+        ]
+    },
+    {
+        "id": "f0c594b4e1b9028f",
+        "type": "serial in",
+        "z": "c3bacffc40d8e6b4",
+        "name": "scanner",
+        "serial": "2094d338f957b3af",
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "cb2f12d1b5e0a154"
+            ]
+        ]
+    },
+    {
+        "id": "faaed5cef799f41f",
+        "type": "function",
+        "z": "c3bacffc40d8e6b4",
+        "name": "ARM_SYSTEM",
+        "func": "// Guardamos la pieza en memoria\nflow.set(\"part\", msg.payload);\n\n// Inicializamos variables\nflow.set(\"state\", \"ARMED\");\nflow.set(\"baseline\", null);\nflow.set(\"trigger_v\", null);\nflow.set(\"trigger_ts\", null);\n\nnode.status({fill:\"green\",shape:\"dot\",text:\"ARMED\"});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a933a062f977fba2",
+        "type": "inject",
+        "z": "c3bacffc40d8e6b4",
+        "name": "poll_labjack",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 240,
+        "wires": [
+            [
+                "2222f81890308b87"
+            ]
+        ]
+    },
+    {
+        "id": "49aeb8fee9acb3fb",
+        "type": "exec",
+        "z": "c3bacffc40d8e6b4",
+        "command": "C:\\Users\\Maintenance\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe C:\\LabJack\\read_u3_ain0.py",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": true,
+        "oldrc": false,
+        "name": "",
+        "x": 580,
+        "y": 500,
+        "wires": [
+            [
+                "29c0ef6cfae9d56e"
+            ],
+            [
+                "26f67ef315143817"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "0bc3f81c74fe8aa1",
+        "type": "debug",
+        "z": "c3bacffc40d8e6b4",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1380,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "560a958e7b9b2265",
+        "type": "debug",
+        "z": "c3bacffc40d8e6b4",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1400,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "2222f81890308b87",
+        "type": "switch",
+        "z": "c3bacffc40d8e6b4",
+        "name": "",
+        "property": "state",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ARMED",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 350,
+        "y": 240,
+        "wires": [
+            [
+                "9c137a9aa85772a8"
+            ]
+        ]
+    },
+    {
+        "id": "cdce06f8c7d7a5e6",
+        "type": "json",
+        "z": "c3bacffc40d8e6b4",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1130,
+        "y": 340,
+        "wires": [
+            [
+                "0bc3f81c74fe8aa1"
+            ]
+        ]
+    },
+    {
+        "id": "9c137a9aa85772a8",
+        "type": "function",
+        "z": "c3bacffc40d8e6b4",
+        "name": "LOCK_LABJACK",
+        "func": "// Evita ejecutar si ya hay un exec en curso\nif (flow.get(\"lj_busy\")) return null;\n\nflow.set(\"lj_busy\", true);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 240,
+        "wires": [
+            [
+                "49aeb8fee9acb3fb"
+            ]
+        ]
+    },
+    {
+        "id": "29c0ef6cfae9d56e",
+        "type": "function",
+        "z": "c3bacffc40d8e6b4",
+        "name": "UNLOCK_LABJACK",
+        "func": "flow.set(\"lj_busy\", false);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 340,
+        "wires": [
+            [
+                "cdce06f8c7d7a5e6"
+            ]
+        ]
+    },
+    {
+        "id": "26f67ef315143817",
+        "type": "function",
+        "z": "c3bacffc40d8e6b4",
+        "name": "UNLOCK_LABJACK",
+        "func": "flow.set(\"lj_busy\", false);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1140,
+        "y": 500,
+        "wires": [
+            [
+                "560a958e7b9b2265"
+            ]
+        ]
+    }
+]
