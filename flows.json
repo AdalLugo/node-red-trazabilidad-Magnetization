@@ -422,5 +422,99 @@
                 "560a958e7b9b2265"
             ]
         ]
+    },
+    {
+        "id": "f33c1af133a37da3",
+        "type": "inject",
+        "z": "c3bacffc40d8e6b4",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 360,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a9ad5f5642b40294",
+        "type": "inject",
+        "z": "c3bacffc40d8e6b4",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 560,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8005796834e5c017",
+        "type": "comment",
+        "z": "c3bacffc40d8e6b4",
+        "name": "test commit",
+        "info": "",
+        "x": 950,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "7ba67ceb3eaba7ae",
+        "type": "serial control",
+        "z": "c3bacffc40d8e6b4",
+        "name": "test commit",
+        "serial": "c08f7044d6da88ab",
+        "x": 470,
+        "y": 860,
+        "wires": [
+            [
+                "70c4f9a393fb4725"
+            ]
+        ]
+    },
+    {
+        "id": "70c4f9a393fb4725",
+        "type": "debug",
+        "z": "c3bacffc40d8e6b4",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 860,
+        "wires": []
     }
 ]
